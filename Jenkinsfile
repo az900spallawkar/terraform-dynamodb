@@ -23,17 +23,19 @@ pipeline {
     stages {
         stage('checkout') {
             steps {
-           
-            
-                  git "https://github.com/az900spallawkar/terraform-dynamodb.git"
-                  }
-        
-        }
+                 script{
+                        dir("terraform")
+                        {
+                            git "https://github.com/easyawslearn/terraform-dynamodb.git"
+                        }
+                    }
+                }
+            }
 
         stage('Plan') {
             steps {
                 sh '''
-                 cd Devops-project1 ;
+                 cd terraform ;
                   terraform init \
                       -upgrade=true \
                       -get=true \
@@ -47,7 +49,7 @@ pipeline {
                       -lock=true
                 '''
                 sh """#!/bin/bash
-                cd Devops-project1 ;terraform workspace show | grep ${environment} ; if [ "\$?" == 0 ];then echo "workspace already exists ";else terraform workspace new ${environment}; fi;
+                cd terraform ;terraform workspace show | grep ${environment} ; if [ "\$?" == 0 ];then echo "workspace already exists ";else terraform workspace new ${environment}; fi;
                 echo "INFO: Terraform -> Working for ${environment}";
                 terraform plan -var region=${region} -out tfplan -lock=true;
                 terraform show -no-color tfplan > tfplan.txt;
@@ -63,7 +65,7 @@ pipeline {
 
           steps {
               script {
-                    def plan = readFile 'Devops-project1/tfplan.txt'
+                    def plan = readFile 'terraform/tfplan.txt'
                     input message: "Do you want to apply the plan?",
                     parameters: [text(name: 'Plan', description: 'Please review the plan', defaultValue: plan)]
               }
@@ -72,7 +74,7 @@ pipeline {
 
         stage('Apply') {
             steps {
-                sh "cd Devops-project1 ; terraform apply -input=false tfplan "
+                sh "cd terraform ; terraform apply -input=false tfplan "
             }
         }
       
