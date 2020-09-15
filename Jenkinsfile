@@ -30,7 +30,7 @@ pipeline {
         stage('Plan') {
             steps {
                 sh '''
-                 
+                 cd Devops-project1 ;
                   terraform init \
                       -upgrade=true \
                       -get=true \
@@ -44,7 +44,7 @@ pipeline {
                       -lock=true
                 '''
                 sh """#!/bin/bash
-                  terraform workspace show | grep ${environment} ; if [ "\$?" == 0 ];then echo "workspace already exists ";else terraform workspace new ${environment}; fi;
+                cd Devops-project1 ;terraform workspace show | grep ${environment} ; if [ "\$?" == 0 ];then echo "workspace already exists ";else terraform workspace new ${environment}; fi;
                 echo "INFO: Terraform -> Working for ${environment}";
                 terraform plan -var region=${region} -out tfplan -lock=true;
                 terraform show -no-color tfplan > tfplan.txt;
@@ -69,7 +69,7 @@ pipeline {
 
         stage('Apply') {
             steps {
-                sh "terraform apply -input=false tfplan "
+                sh "cd Devops-project1 ; terraform apply -input=false tfplan "
             }
         }
       
