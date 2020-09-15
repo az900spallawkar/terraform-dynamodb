@@ -27,7 +27,7 @@ pipeline {
             
                   git "https://github.com/az900spallawkar/terraform-dynamodb.git"
                   }
-        }
+        
         }
 
         stage('Plan') {
