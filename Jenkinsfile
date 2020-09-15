@@ -22,11 +22,13 @@ pipeline {
             }
     stages {
         stage('checkout') {
+            script {
             dir("Devops-project1")
             steps {
                   git "https://github.com/az900spallawkar/terraform-dynamodb.git"
                   }
             }
+        }
 
         stage('Plan') {
             steps {
