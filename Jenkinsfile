@@ -26,7 +26,7 @@ pipeline {
                  script{
                         dir("terraform")
                         {
-                            git "https://github.com/terraform-dynamodb.git"
+                            git "https://github.com/az900spallawkar/terraform-dynamodb.git"
                         }
                     }
                 }
